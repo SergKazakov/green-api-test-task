@@ -1,109 +1,15 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>green-api-test-task</title>
-    <link
-      rel="stylesheet"
-      href="https://unpkg.com/bootstrap@5.3.3/dist/css/bootstrap.min.css"
-    />
     <style>
       textarea {
         resize: none;
       }
     </style>
-    <script type="module">
-      import "https://unpkg.com/axios@1.7.2/dist/axios.min.js";
-      import {
-        computed,
-        createApp,
-        ref,
-      } from "https://unpkg.com/vue@3/dist/vue.esm-browser.prod.js";
-
-      createApp({
-        setup() {
-          const apiUrl = ref();
-
-          const idInstance = ref();
-
-          const apiTokenInstance = ref();
-
-          const response = ref();
-
-          const sendRequest = async (path, data) => {
-            try {
-              const { data: d } = await axios({
-                ...(data && { method: "POST", data }),
-                url: `${apiUrl.value}/waInstance${idInstance.value}/${path}/${apiTokenInstance.value}`,
-              });
-
-              response.value = JSON.stringify(d, null, 2);
-            } catch (error) {
-              response.value = error.response?.data;
-            }
-          };
-
-          const getSettings = () => sendRequest("getSettings");
-
-          const getStateInstance = () => sendRequest("getStateInstance");
-
-          const chatId = ref();
-
-          const message = ref();
-
-          const sendMessage = () =>
-            sendRequest("sendMessage", {
-              chatId: chatId.value,
-              message: message.value,
-            });
-
-          const urlFile = ref();
-
-          const fileName = ref();
-
-          const sendFileByUrl = () =>
-            sendRequest("sendFileByUrl", {
-              chatId: chatId.value,
-              urlFile: urlFile.value,
-              fileName: fileName.value,
-            });
-
-          const isDisabled = computed(() => {
-            const shouldDisable = !(
-              apiUrl.value &&
-              idInstance.value &&
-              apiTokenInstance.value
-            );
-
-            return {
-              getSettings: shouldDisable,
-              getStateInstance: shouldDisable,
-              sendMessage: shouldDisable || !(chatId.value && message.value),
-              sendFileByUrl:
-                shouldDisable ||
-                !(chatId.value && urlFile.value && fileName.value),
-            };
-          });
-
-          return {
-            apiTokenInstance,
-            apiUrl,
-            chatId,
-            fileName,
-            getSettings,
-            getStateInstance,
-            idInstance,
-            isDisabled,
-            message,
-            response,
-            sendFileByUrl,
-            sendMessage,
-            urlFile,
-          };
-        },
-      }).mount("#app");
-    </script>
+    <script type="module" src="./index.js"></script>
   </head>
   <body>
     <div id="app" class="container-xxl">
